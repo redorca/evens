@@ -1,3 +1,11 @@
 evens
 *.o
 core
+*.swp
+*.tmp
+*.log
+log.*
+tmp.*
+/tmp
+/logs
+
