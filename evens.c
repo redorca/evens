@@ -11,16 +11,21 @@
 #include <string.h>
 #include <ctype.h>
 
-uint8_t bignum;
+uint8_t bignum, bigindex;
 char *bigword;
+char *sfx[] = {"th", "st"};
+
 char err_string[] = " Something's up here.";
 
+#define SFX(a)	(a%10 != 1 ? sfx[0] : sfx[1])
+
 #define ISEVEN(a)	!(a & 0x1)
-#define UPDATE_BIGGEST(a, b)	\
+#define UPDATE_BIGGEST(a, b, c)	\
 	if (b > bignum)	\
 	{			\
 		bignum = b;	\
 		bigword = a;	\
+		bigindex = c;	\
 	}
 /*
  * Sort of a strtok but returning the number of chars in
@@ -68,8 +73,8 @@ char *foo(int count, char *stuff[])
 
 int main(int argc, char *argv[])
 {
-	char *word, *sntnce;
-	uint8_t many;
+	char *word, *sntnce, ordinal[8];
+	uint8_t many, word_position;
 	if (argc < 2)
 	{
 		printf("What? No words come to mind?\n");
@@ -77,11 +82,13 @@ int main(int argc, char *argv[])
 	}
 
 	bignum = 0;
+	word_position = 1;	/* counting starts with 1 rather than 0. */
 	sntnce = word = foo(argc -1, argv);
 	while (*sntnce != 0)
 	{
 		many = scan(&sntnce, &word);
-		if (ISEVEN(many)) { UPDATE_BIGGEST(word, many); }
+		if (ISEVEN(many)) { UPDATE_BIGGEST(word, many, word_position); }
+		word_position++;
 	}
 
 	if (bignum == 0)
@@ -89,5 +96,7 @@ int main(int argc, char *argv[])
 		printf("There aren't any words of an even number of letters.\n");
 		return -3;
 	}
-	printf("The word with the most even number of letters [%d] is <%s>\n", bignum, bigword);
+	snprintf(ordinal, 5, "%d%s", bigindex, SFX(bigindex));
+
+	printf("The word with the most even number of letters [%d] is the %s word <%s> in the string.\n", bignum, ordinal, bigword);
 }

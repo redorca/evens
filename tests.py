@@ -15,7 +15,7 @@ test_strings = [ ["When in the course of human events.", "course", 6],
 
 
 for i in range(0, len(test_strings)):
-    print("\n    test string[", i, "][ 0 ]", '"', test_strings[i][0], '"')
+    print("\n    test string[", i, "][ 0 ] :: ", '"', test_strings[i][0], '"')
     print("    answer == ", test_strings[i][1], " with ", test_strings[i][2], " letters.")
     test = [ './evens', test_strings[i][0] ]
     subprocess.run(test, check=False)
