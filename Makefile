@@ -38,6 +38,6 @@ clean:
 clobber: clean
 	@$(RM) core
 
-tests test:
+tests test: $(BINS)
 	@./$(testprog)
 
